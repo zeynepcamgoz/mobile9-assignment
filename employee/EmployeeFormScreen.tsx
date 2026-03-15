@@ -1,38 +1,29 @@
-import { useRouter } from "expo-router";
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { Button, Modal, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Yup from 'yup';
+import InputField from '../components/InputField';
 
 const initialValues = {
   fullName: '',
   email: '',
   phone: '',
   position: '',
-  startDate: '',
-  notes: '',
 };
 
 const employeeSchema = Yup.object().shape({
-  fullName: Yup.string().required('Full name is required').min(3, 'Full name must be at least 3 characters'),
-  email: Yup.string().required('Email is required').email('Must be a valid email'),
-  phone: Yup.string().required('Phone number is required').min(10, 'Phone number must be at least 10 digits').max(15, 'Phone number must be at most 15 digits'),
+  fullName: Yup.string().required('Name is required').min(3, 'Too short'),
+  email: Yup.string().required('Email is required').email('Invalid email'),
+  phone: Yup.string().required('Phone is required').min(10, 'Too short'),
   position: Yup.string().required('Position is required'),
-  startDate: Yup.string().required('Start date is required'),
-  notes: Yup.string().max(200, 'Notes must be at most 200 characters'),
 });
 
 const EmployeeFormScreen = () => {
-  const router = useRouter();
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Employee Information Form</Text>
-
-      <View style={styles.backButton}>
-        <Button title="Back" onPress={() => router.back()} />
-      </View>
+      <Text style={styles.title}>New Employee Details 📋</Text>
 
       <Formik
         initialValues={initialValues}
@@ -41,119 +32,56 @@ const EmployeeFormScreen = () => {
           setModalVisible(true);
           resetForm();
         }}
-        validateOnMount
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          isValid,
-          isSubmitting,
-        }) => (
+        {({ values, errors, touched, handleChange, handleBlur, handleSubmit, isValid }) => (
           <View style={styles.form}>
-
-            <Text style={styles.label}>Full Name</Text>
-            <TextInput
-              style={styles.input}
+            <InputField
+              label="Full Name"
+              placeholder="e.g. Pragunya Wadhwa"
               value={values.fullName}
               onChangeText={handleChange('fullName')}
               onBlur={handleBlur('fullName')}
-              placeholder="Enter full name"
+              error={errors.fullName}
+              touched={touched.fullName}
             />
-            {touched.fullName && errors.fullName && (
-              <Text style={styles.error}>{errors.fullName}</Text>
-            )}
 
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
+            <InputField
+              label="Email"
+              placeholder="hello@sait.ca"
               value={values.email}
               onChangeText={handleChange('email')}
               onBlur={handleBlur('email')}
-              placeholder="Enter email"
+              error={errors.email}
+              touched={touched.email}
               keyboardType="email-address"
-              autoCapitalize="none"
             />
-            {touched.email && errors.email && (
-              <Text style={styles.error}>{errors.email}</Text>
-            )}
 
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
+            <InputField
+              label="Phone Number"
+              placeholder="403-000-0000"
               value={values.phone}
               onChangeText={handleChange('phone')}
               onBlur={handleBlur('phone')}
-              placeholder="Enter phone number"
+              error={errors.phone}
+              touched={touched.phone}
               keyboardType="phone-pad"
             />
-            {touched.phone && errors.phone && (
-              <Text style={styles.error}>{errors.phone}</Text>
-            )}
 
-            <Text style={styles.label}>Position</Text>
-            <TextInput
-              style={styles.input}
-              value={values.position}
-              onChangeText={handleChange('position')}
-              onBlur={handleBlur('position')}
-              placeholder="Enter position"
-            />
-            {touched.position && errors.position && (
-              <Text style={styles.error}>{errors.position}</Text>
-            )}
-
-            <Text style={styles.label}>Start Date</Text>
-            <TextInput
-              style={styles.input}
-              value={values.startDate}
-              onChangeText={handleChange('startDate')}
-              onBlur={handleBlur('startDate')}
-              placeholder="YYYY-MM-DD"
-            />
-            {touched.startDate && errors.startDate && (
-              <Text style={styles.error}>{errors.startDate}</Text>
-            )}
-
-            <Text style={styles.label}>Notes (optional)</Text>
-            <TextInput
-              style={[styles.input, styles.multiline]}
-              value={values.notes}
-              onChangeText={handleChange('notes')}
-              onBlur={handleBlur('notes')}
-              placeholder="Additional notes"
-              multiline
-              numberOfLines={4}
-              textAlignVertical="top"
-            />
-            {touched.notes && errors.notes && (
-              <Text style={styles.error}>{errors.notes}</Text>
-            )}
-
-            <View style={styles.submitButton}>
-              <Button
-                title={isSubmitting ? 'Submitting...' : 'Submit'}
-                onPress={() => handleSubmit()}
-                disabled={!isValid || isSubmitting}
-              />
+            <View style={styles.buttonContainer}>
+              <Button title="Submit Info" onPress={() => handleSubmit()} disabled={!isValid} color="#6200EE" />
             </View>
-
           </View>
         )}
       </Formik>
 
       <Modal visible={modalVisible} transparent animationType="fade">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalText}>Employee information submitted successfully!</Text>
-            <Button title="Close" onPress={() => setModalVisible(false)} />
+        <View style={styles.modalBg}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Employee Added Successfully! ✨</Text>
+            <Button title="Dismiss" onPress={() => setModalVisible(false)} />
           </View>
         </View>
       </Modal>
-
     </ScrollView>
   );
 };
@@ -161,59 +89,11 @@ const EmployeeFormScreen = () => {
 export default EmployeeFormScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 24,
-    backgroundColor: '#ffffff',
-  },
-  title: {
-    fontSize: 26,
-    fontWeight: '700',
-    marginBottom: 24,
-    textAlign: 'center',
-  },
-  backButton: {
-    marginBottom: 24,
-  },
-  form: {
-    gap: 16,
-  },
-  label: {
-    fontSize: 15,
-    fontWeight: '500',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 15,
-  },
-  multiline: {
-    height: 120,
-  },
-  error: {
-    color: 'red',
-    fontSize: 13,
-  },
-  submitButton: {
-    marginTop: 32,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    backgroundColor: 'rgba(0,0,0,0.4)',
-    padding: 24,
-  },
-  modalBox: {
-    backgroundColor: '#fff',
-    padding: 24,
-    borderRadius: 12,
-  },
-  modalText: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
+  container: { padding: 24, backgroundColor: '#F5F5F5' },
+  title: { fontSize: 28, fontWeight: '800', marginBottom: 30, color: '#333', textAlign: 'center' },
+  form: { backgroundColor: '#fff', padding: 20, borderRadius: 15, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10, elevation: 5 },
+  buttonContainer: { marginTop: 20 },
+  modalBg: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', padding: 30 },
+  modalContent: { backgroundColor: '#fff', padding: 30, borderRadius: 20, alignItems: 'center' },
+  modalText: { fontSize: 18, fontWeight: '600', marginBottom: 20 }
 });
