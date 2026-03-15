@@ -75,6 +75,11 @@ export default function SignInScreen({ navigation }: Props) {
         <Pressable onPress={() => navigation.navigate("Sign up")} style={styles.SignUpLink}>
           <Text style={styles.boldText}>Already registered? Sign Up</Text>
         </Pressable></View>
+
+      <View style={styles.SignUpContainer}>
+        <Pressable onPress={() => navigation.navigate("Employee form")} style={styles.SignUpLink}>
+          <Text style={styles.boldText}>For our employees.</Text>
+        </Pressable></View>
     </View>
   );
 }

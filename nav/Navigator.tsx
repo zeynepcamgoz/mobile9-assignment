@@ -1,3 +1,4 @@
+import EmployeeFormScreen from "@/employee/EmployeeFormScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
@@ -11,6 +12,7 @@ export default function Navigator() {
     }}>
       <Stack.Screen name="Sign in" component={SignInScreen} options={{ title: "Sign In" }} />
       <Stack.Screen name="Sign up" component={SignUpScreen} />
+      <Stack.Screen name="Employee form" component={EmployeeFormScreen} options={{ title: "Employee Form" }} />
     </Stack.Navigator>
   );
 }

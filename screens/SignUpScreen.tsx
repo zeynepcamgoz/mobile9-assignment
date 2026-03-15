@@ -108,6 +108,11 @@ export default function SignUpScreen({ navigation }: ScreenProps) {
         <Pressable onPress={() => navigation.navigate("Sign in")} style={styles.loginLink}>
           <Text style={styles.boldText}>Already registered? Log in</Text>
         </Pressable></View>
+
+      <View style={styles.loginContainer}>
+        <Pressable onPress={() => navigation.navigate("Employee form")} style={styles.loginLink}>
+          <Text style={styles.boldText}>For our employees.</Text>
+        </Pressable></View>
     </View>
   );
 }
