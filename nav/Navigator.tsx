@@ -1,5 +1,6 @@
-import EmployeeFormScreen from "@/employee/EmployeeFormScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import EmployeeFormScreen from "../employee/EmployeeFormScreen";
+import HomeScreen from "../screens/HomeScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 
@@ -10,9 +11,10 @@ export default function Navigator() {
     <Stack.Navigator screenOptions={{
       headerTitleAlign: "center",
     }}>
+      <Stack.Screen name="Home page" component={HomeScreen} />
       <Stack.Screen name="Sign in" component={SignInScreen} options={{ title: "Sign In" }} />
       <Stack.Screen name="Sign up" component={SignUpScreen} />
-      <Stack.Screen name="Employee form" component={EmployeeFormScreen} options={{ title: "Employee Form" }} />
+      <Stack.Screen name="Employee form" component={EmployeeFormScreen} />
     </Stack.Navigator>
   );
 }

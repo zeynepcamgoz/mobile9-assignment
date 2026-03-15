@@ -1,8 +1,12 @@
 import { Formik } from 'formik';
 import React, { useState } from 'react';
-import { Button, Modal, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import * as Yup from 'yup';
 import InputField from '../components/InputField';
+
+type Props = {
+  navigation: any;
+};
 
 const initialValues = {
   fullName: '',
@@ -18,7 +22,7 @@ const employeeSchema = Yup.object().shape({
   position: Yup.string().required('Position is required'),
 });
 
-const EmployeeFormScreen = () => {
+export default function EmployeeFormScreen({ navigation }: Props) {
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -82,13 +86,40 @@ const EmployeeFormScreen = () => {
           </View>
         </View>
       </Modal>
+
+      <View style={styles.SignUpContainer}>
+        <Pressable onPress={() => navigation.navigate("Sign up")} style={styles.SignUpLink}>
+          <Text style={styles.boldText}>Already registered? Sign Up</Text>
+        </Pressable></View>
+
+      <View style={styles.loginContainer}>
+        <Pressable onPress={() => navigation.navigate("Sign in")} style={styles.loginLink}>
+          <Text style={styles.boldText}>Already registered? Log in</Text>
+        </Pressable></View>
     </ScrollView>
   );
 };
 
-export default EmployeeFormScreen;
+
 
 const styles = StyleSheet.create({
+  loginLink: {
+    padding: 15,
+  },
+  loginContainer: {
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  SignUpLink: {
+    padding: 15,
+  },
+  SignUpContainer: {
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
   container: { padding: 24, backgroundColor: '#F5F5F5' },
   title: { fontSize: 28, fontWeight: '800', marginBottom: 30, color: '#333', textAlign: 'center' },
   form: { backgroundColor: '#fff', padding: 20, borderRadius: 15, shadowColor: '#000', shadowOpacity: 0.1, shadowRadius: 10, elevation: 5 },
